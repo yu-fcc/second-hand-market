@@ -1,0 +1,90 @@
+.login-container,.register-container{
+  background-image: url('../photo/y8.jpg');
+  background-size: cover;  
+  background-position: center;  
+  height: 320px; /* 根据需要调整 */  
+  width: 100%;
+}
+.login-form {  
+    width: 100%; /* 或其他你需要的宽度 */  
+    max-width: 400px; /* 可选，设置最大宽度 */  
+    margin: 0 auto; /* 水平居中 */  
+    padding: 20px; /* 内边距 */  
+    position: absolute;
+    top: 230px;
+    left: 500px;
+  }
+  .register-form {  
+    width: 100%; /* 或其他你需要的宽度 */  
+    max-width: 400px; /* 可选，设置最大宽度 */  
+    margin: 0 auto; /* 水平居中 */  
+    padding: 20px; /* 内边距 */  
+    position: absolute;
+    top: 180px;
+    left: 400px;
+  }
+.demo-logo{
+  background-image: url('../photo/彩虹圈.png'); /* 设置logo图片 */
+  background-size: cover; /* 背景图片覆盖整个元素区域 */
+  background-repeat: no-repeat; /* 背景图片不重复 */
+  
+}
+.product-container {  
+  display: flex;  
+  justify-content: space-between; /* 根据需要调整 */  
+  align-items: flex-start; /* 根据需要调整 */  
+}  
+
+.product-image-container {  
+  flex: 1; /* 可以根据需要调整图片容器的宽度 */  
+  margin-right: 20px; /* 根据需要添加右边距 */  
+}  
+
+.product-image-container img {  
+  width: 100%; /* 使图片填满容器 */  
+  height: auto; /* 保持图片的原始纵横比 */  
+}  
+
+.product-details-container {  
+  flex: 2.5; /* 可以根据需要调整描述容器的宽度 */  
+  /* 添加其他样式以美化描述部分 */  
+}  
+.product-button{
+  position: absolute;
+  right: 180px;
+  bottom: 140px;
+}
+
+.product-favorite{
+  position: absolute;
+  right: 200px;
+  top:235px;
+}
+.product-favorite-text{
+  position: absolute;
+  right:190px;
+  top: 225px;
+}
+.select-form-button{
+  position: absolute;
+  right:440px;
+  top: 335px;
+}
+.product-report{
+  position: absolute;
+  bottom: 160px;
+  right: 500px;
+}
+.product-report-text{
+  position: absolute;
+  bottom: 115px;
+  right: 510px;
+}
+.product-report-rate{
+  size: big;
+}
+.searchProduct-button{
+  position: absolute;
+  left: 200px;
+  bottom: 20px;
+}
