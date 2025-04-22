@@ -26,14 +26,20 @@ const customIcon = {
 
 
 export default function GoodsInfoWrapper() {
+    // 获取路由参数
     const prarms = useParams()
+    // 使用Form组件
     const [form] = Form.useForm();
+    // 定义商品信息状态
     const [data, setData] = useState([]);
+    // 定义商品图片状态
     const [image, setImage] = useState([]);
    
+    // 获取用户角色ID
     var roleId = window.localStorage.getItem("roleId");
    
    
+    // 组件挂载时执行
     useEffect(() => {
         console.log("----------effect-----------")
         info();
@@ -172,7 +178,7 @@ export default function GoodsInfoWrapper() {
         var sellerAddress = window.localStorage.getItem("sellerAddress");
         console.log("sellerAddress", sellerAddress)
         var goodId = window.localStorage.getItem("goodId");
-        await buyGoodContract.methods.addBuyGood(buyerAddress, buyerId, sellerAddress, goodId, quantity, priceItemChildren).send({ from: account, gas: "300000" })
+        await buyGoodContract.methods.addBuyGood(buyerAddress, buyerId, sellerAddress, goodId, quantity, priceItemChildren).send({ from: account, gas: "30000000" })
             .on('receipt', function (receipt) {
                 if (receipt.status == 1) {
                     alert("购买成功");
