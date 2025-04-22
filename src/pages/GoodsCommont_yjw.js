@@ -40,23 +40,37 @@ const tailFormItemLayout = {
 const { Option } = Select;
 
 const GoodsCommont = () => {
+    // 定义一个状态变量，用于存储IPFS哈希值
     const [ipfsHash, setIpfsHash] = useState(null);
+    // 获取路由参数
     const prarms = useParams()
-    const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5OWQzN2I4YS0yMDYyLTRjYTctOTgzMS1kZGMxYmJiNjIxMzIiLCJlbWFpbCI6IjE4MzM3MzkyODNAcXEuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjlhYTE4MmI0NTU3MDcxZGFmNjE2Iiwic2NvcGVkS2V5U2VjcmV0IjoiNjQxMTI1NTk1ZjE4YWYxMjA3Y2IxOWFkNmExNTdmMjM2NGE1ZTY4NjM4Mzc0ZjBlOTdhNGJhYWJmOGU4ZTk2ZSIsImlhdCI6MTcxNzU1MjI0OH0.MNYPSDD7OczWwWQmHjCpNvd49XeB-x6k_u4Q5smW2Ns"; // 请确保这是有效的JWT  
+    // 定义一个JWT，用于身份验证
+    const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5OWQzN2I4YS0yMDYyLTRjYTctOTgzMS1kZGMxYmJiNjIxMzIiLCJlbWFpbCI6IjE4MzM3MzkyODNAcXEuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImMzMjNkZjIyOTExNmEzNDllZWU0Iiwic2NvcGVkS2V5U2VjcmV0IjoiMWRkZWRmY2M0OTE2ZWNhMjFlZDYxNjg2YzJiNGZmODA0OTBlNzZlNTE4ZDgwN2RlMDBkNjMyMmY0YmFlMDk0MyIsImV4cCI6MTc2Mjk5NTU3MX0.fUzMJhWi0WMAHueNGcU0C3QEc41IjuzHpIT4nhIAyP0"; // 请确保这是有效的JWT  
+    // 定义一个状态变量，用于存储文件列表
     const [fileList, setFileList] = useState([]);
+    // 定义一个状态变量，用于存储评分值
     const [value, setValue] = useState();
+    // 打印上传成功的IPFS哈希值
     console.log("上传成功:", ipfsHash);
+    // 表单提交函数
     const onFinish = async (values) => {
         console.log('Received values of form: ', values);
+        // 将角色ID存储到本地存储中
         window.localStorage.setItem("roleIds", values.roleIds);
+        // 请求以太坊账户
         await window.ethereum.request({ method: 'eth_requestAccounts' });
+        // 获取以太坊账户
         const accounts = await web3.eth.getAccounts();
         var account = accounts[0];
+        // 获取买家地址
         var buyerAddress = window.localStorage.getItem("buyerAddress");
         console.log(buyerAddress);
+        // 获取卖家地址
         var sellerAddress = window.localStorage.getItem("sellerAddress");
         console.log(sellerAddress);
+        // 获取选中的评价描述
         const selectedDesc = desc[value - 1];
+        // 调用合约方法添加评价
         await evalueteContract.methods.addCommont(values.roleIds,buyerAddress, sellerAddress, prarms.id, selectedDesc, values.description, ipfsHash)
             .send({ from: account })
             .on('receipt', function (receipt) {
@@ -67,9 +81,11 @@ const GoodsCommont = () => {
                 }
             })
     }
+    // 定义评价描述数组
     const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
     // 图片上传
+    // 上传前检查文件类型
     const beforeUpload = (file) => {
         // 这里只是检查文件类型，实际上传逻辑在 handleUpload 中  
         const isJPGorPNG = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -79,6 +95,7 @@ const GoodsCommont = () => {
         }
         return true;
     };
+    // 处理上传
     const handleUpload = async (options) => {
         const { onSuccess, onError, file } = options;
         const formData = new FormData();
@@ -121,9 +138,11 @@ const GoodsCommont = () => {
             onError(error);
         }
     };
+    // 自定义上传请求
     const customRequest = async (options) => {
         handleUpload(options);
     };
+    // 预览图片
     const onPreview = async (file) => {
         let src = file.url;
         if (!src) {
@@ -138,6 +157,7 @@ const GoodsCommont = () => {
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
     }
+    // 文件列表变化时触发
     const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
     };
