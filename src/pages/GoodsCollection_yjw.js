@@ -9,10 +9,10 @@ const { Meta } = Card;
 
 const GoodsCollection = () => {
   //  const location = useLocation();
-  const [data, setData] = useState([]);
-  const [idData, setIdData] = useState([]);
-  const [sellerAdresData, setSellerAdresData] = useState([]);
-  const navigate = useNavigate();
+  const [data, setData] = useState([]); // 用于存储商品数据
+  const [idData, setIdData] = useState([]); // 用于存储商品ID数据
+  const [sellerAdresData, setSellerAdresData] = useState([]); // 用于存储卖家地址数据
+  const navigate = useNavigate(); // 用于导航到其他页面
   //const { data } = location.state || [];
   useEffect(() => {
     console.log("----------effect-----------")
@@ -25,15 +25,15 @@ const GoodsCollection = () => {
   const list2 = async () => {
     const data = [];
     const idData = [];
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const accounts = await web3.eth.getAccounts();
-    var account = accounts[0];
-    var goodId = window.localStorage.getItem("idData");
-    var sellerAdres = window.localStorage.getItem("sellerAdres");
-      var sellerContract = new web3.eth.Contract(sellerABI, sellerAdres);
-      var userName = await sellerContract.methods.userName().call({ from: account })
-      var sellerId = await sellerContract.methods.newSellerId().call({ from: account })
-        var productInfo = await sellerContract.methods.getProductInfoById(goodId).call({ from: account })
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); // 请求用户授权
+    const accounts = await web3.eth.getAccounts(); // 获取用户账户
+    var account = accounts[0]; // 获取用户账户地址
+    var goodId = window.localStorage.getItem("idData"); // 获取商品ID
+    var sellerAdres = window.localStorage.getItem("sellerAdres"); // 获取卖家地址
+      var sellerContract = new web3.eth.Contract(sellerABI, sellerAdres); // 创建卖家合约实例
+      var userName = await sellerContract.methods.userName().call({ from: account }) // 获取卖家名称
+      var sellerId = await sellerContract.methods.newSellerId().call({ from: account }) // 获取卖家ID
+        var productInfo = await sellerContract.methods.getProductInfoById(goodId).call({ from: account }) // 获取商品信息
         data.push({
           title: userName,
           sellerId: sellerId,
@@ -44,7 +44,7 @@ const GoodsCollection = () => {
           quantity: productInfo[4],
           imageHash: productInfo[6],
         })
-    setData(data);
+    setData(data); // 设置商品数据
   }
 
   return (
@@ -68,8 +68,8 @@ const GoodsCollection = () => {
                 () => {
                   console.log(item)
 
-                  navigate(`/api/1/goodInfoWrapper/${item.productId}`)
-                  window.localStorage.setItem("sellerId", item.sellerId);
+                  navigate(`/api/1/goodInfoWrapper/${item.productId}`) // 导航到商品详情页面
+                  window.localStorage.setItem("sellerId", item.sellerId); // 存储卖家ID
                 }
 
 
