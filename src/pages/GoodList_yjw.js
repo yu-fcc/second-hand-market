@@ -8,37 +8,37 @@ const { Meta } = Card;
 
 const IndexListWapper = () => {
   //  const location = useLocation();
-  const [data, setData] = useState([]);
-  const navigate = useNavigate();
+  const [data, setData] = useState([]); // 定义一个状态变量data，用于存储商品列表数据
+  const navigate = useNavigate(); // 使用useNavigate钩子函数，用于页面跳转
   //const { data } = location.state || [];
   useEffect(() => {
     console.log("----------effect-----------")
-    list2();
+    list2(); // 调用list2函数，获取商品列表数据
     return () => { //退出组件执行
       console.log("----------return-----------")
     };
   }, []); // 空数组[]表示仅在组件挂载时执行
 
   const list2 = async () => {
-    const data = [];
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const accounts = await web3.eth.getAccounts();
-    var account = accounts[0];
-    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account });
-    var roleId = window.localStorage.getItem("roleId");
-    if (roleId === '1') {
-      for (var i = 0; i < sellerContractAddress.length; i++) {
-        var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]);
-        var userName = await sellerContract.methods.userName().call({ from: account })
-        var sellerId = await sellerContract.methods.newSellerId().call({ from: account })
-        var productIds = await sellerContract.methods.getProductIds().call({ from: account })
-        for (var j = 0; j < productIds.length; j++) {
-          var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account })
-          var sellerAddress = sellerContractAddress[i];
+    const data = []; // 定义一个空数组，用于存储商品列表数据
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); // 请求用户授权
+    const accounts = await web3.eth.getAccounts(); // 获取用户账户
+    var account = accounts[0]; // 获取用户账户地址
+    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account }); // 获取卖家合约地址列表
+    var roleId = window.localStorage.getItem("roleId"); // 获取用户角色ID
+    if (roleId === '1') { // 如果用户角色为卖家
+      for (var i = 0; i < sellerContractAddress.length; i++) { // 遍历卖家合约地址列表
+        var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]); // 创建卖家合约实例
+        var userName = await sellerContract.methods.userName().call({ from: account }) // 获取卖家用户名
+        var sellerId = await sellerContract.methods.newSellerId().call({ from: account }) // 获取卖家ID
+        var productIds = await sellerContract.methods.getProductIds().call({ from: account }) // 获取商品ID列表
+        for (var j = 0; j < productIds.length; j++) { // 遍历商品ID列表
+          var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account }) // 获取商品信息
+          var sellerAddress = sellerContractAddress[i]; // 获取卖家地址
           console.log(sellerAddress);
-          var onsale = window.localStorage.getItem("status");
+          var onsale = window.localStorage.getItem("status"); // 获取商品状态
           console.log(onsale)
-          if (productInfo[5] == true) {
+          if (productInfo[5] == true) { // 如果商品状态为在售
             data.push({
               title: userName,
               sellerId: sellerId,
@@ -50,18 +50,18 @@ const IndexListWapper = () => {
               status: productInfo[5],
               imageHash: productInfo[6],
             })
-            setData(data);
+            setData(data); // 更新商品列表数据
           }
         }
       }
-    } else {
-      var sellerId = window.localStorage.getItem("sellerId");
-      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[sellerId - 1]);
-      var userName = await sellerContract.methods.userName().call({ from: account })
-      var productIds = await sellerContract.methods.getProductIds().call({ from: account })
-      for (var j = 0; j < productIds.length; j++) {
-        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account })
-        var sellerAddress = sellerContractAddress[sellerId - 1];
+    } else { // 如果用户角色为买家
+      var sellerId = window.localStorage.getItem("sellerId"); // 获取卖家ID
+      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[sellerId - 1]); // 创建卖家合约实例
+      var userName = await sellerContract.methods.userName().call({ from: account }) // 获取卖家用户名
+      var productIds = await sellerContract.methods.getProductIds().call({ from: account }) // 获取商品ID列表
+      for (var j = 0; j < productIds.length; j++) { // 遍历商品ID列表
+        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account }) // 获取商品信息
+        var sellerAddress = sellerContractAddress[sellerId - 1]; // 获取卖家地址
         console.log(sellerAddress);
         data.push({
           title: userName,
@@ -73,7 +73,7 @@ const IndexListWapper = () => {
           status: productInfo[5],
           imageHash: productInfo[6],
         })
-        setData(data);
+        setData(data); // 更新商品列表数据
       }
     }
 
