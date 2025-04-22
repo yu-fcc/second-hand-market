@@ -1,12 +1,12 @@
 import { Web3 } from 'web3';
 export const web3 = new Web3(window.ethereum);
 
-export const buyerListAddress ="0x11Fd19AB329BAAFc1537e59E3942198B58B35617"
-export const sellerListAddress ="0x950dA23e340dFB4db64d47ddE612F5fC486dC8be"
-export const ERC20Address="0xa2e66488632aF9C8D6C7261A6Af966C27177963D"
-export const buyGoodAddress="0x0088bf8568D0AeB5f4987D252d28aEa9E057DD24"
-export const evalueteAddress = "0x618c5daA1E4824B8e4EDF43421fBF6B1D80518B0"
-export const reportsAddress = "0x9210E7E6CE4AfFF4Dd641E4b4196160D9Ba2b836"
+export const buyerListAddress ="0xa0213F4211058cDC80A89eB56136135496EDa44E"
+export const sellerListAddress ="0x8F3a480b7C86d6de54011883204f8e0045b6E074"
+export const ERC20Address="0x8e34933D09cA5707bf4f6681fd14a9C0011925af"
+export const buyGoodAddress="0xAbD564fA60ED02CC60092AD33C5F2Bc37cfeC026"
+export const evalueteAddress = "0x177ae71ABA6eB9478eFD46B4b0dD6f292E568C9B"
+export const reportsAddress = "0x4a7b4Fc79Be4bD6E2d3d91B1734450B1EDc44f15"
 
 export const buyerListABI =[
 	{
