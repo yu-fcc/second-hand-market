@@ -8,13 +8,13 @@ const { Option } = Select;
 const { Meta } = Card;
 
 const GoodSelect = () => {
-  const [form] = Form.useForm();
-  const [data, setData] = useState([]);
-  const [classesData, setClassesData] = useState([]);
+  const [form] = Form.useForm(); // 使用Form组件
+  const [data, setData] = useState([]); // 定义data状态，用于存储查询结果
+  const [classesData, setClassesData] = useState([]); // 定义classesData状态，用于存储商品类别
 
   useEffect(() => {
     console.log("----------effect-----------")
-    DynamicTags();
+    DynamicTags(); // 调用DynamicTags函数
     return () => { //退出组件执行
       console.log("----------return-----------")
     };
@@ -25,21 +25,21 @@ const GoodSelect = () => {
 
   //定义标签值
   const DynamicTags = async () => {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const accounts = await web3.eth.getAccounts();
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); // 请求用户授权
+    const accounts = await web3.eth.getAccounts(); // 获取用户账户
     var account = accounts[0];
-    const classesData = [];
-    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account });
+    const classesData = []; // 定义classesData数组
+    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account }); // 获取卖家合约地址
     for (var i = 0; i < sellerContractAddress.length; i++) {
-      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]);
-      var productIds = await sellerContract.methods.getProductIds().call({ from: account })
+      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]); // 创建卖家合约实例
+      var productIds = await sellerContract.methods.getProductIds().call({ from: account }) // 获取商品ID
       for (var j = 0; j < productIds.length; j++) {
-        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account })
+        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account }) // 获取商品信息
         if (productInfo[5] == true) {
-          classesData.push(productInfo[7])
+          classesData.push(productInfo[7]) // 将商品类别添加到classesData数组
         }
       }
-      setClassesData(classesData);
+      setClassesData(classesData); // 更新classesData状态
     }
     console.log(classesData)
   }
@@ -53,20 +53,22 @@ const GoodSelect = () => {
     console.log('Received values of form: ', values);
     console.log(values.selectByWord)
     const data = [];
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const accounts = await web3.eth.getAccounts();
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); // 请求用户授权
+    const accounts = await web3.eth.getAccounts(); // 获取用户账户
     var account = accounts[0];
-    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account });
+    var sellerContractAddress = await sellerListContract.methods.getSellerList().call({ from: account }); // 获取卖家合约地址
     for (var i = 0; i < sellerContractAddress.length; i++) {
-      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]);
+      var sellerContract = new web3.eth.Contract(sellerABI, sellerContractAddress[i]); // 创建卖家合约实例
       var userName = await sellerContract.methods.userName().call({ from: account })
       var sellerId = await sellerContract.methods.newSellerId().call({ from: account })
-      var productIds = await sellerContract.methods.getProductIds().call({ from: account })
+      var productIds = await sellerContract.methods.getProductIds().call({ from: account }) // 获取商品ID
+       //遍历商品ID数组，获取商品详细信息
       for (var j = 0; j < productIds.length; j++) {
-        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account })
+        var productInfo = await sellerContract.methods.getProductInfoById(productIds[j]).call({ from: account }) // 获取商品信息
         var sellerAddress = sellerContractAddress[i];
-
+        // 根据用户选择的条件进行筛选
         if (values.selectById == 1) {
+          // 根据价格范围进行筛选
           if (productInfo[3] <= values.selectByWord) {
             if (productInfo[5] == true) {
               data.push({
@@ -82,6 +84,7 @@ const GoodSelect = () => {
             }
           }
         } else {
+          // 根据商品类别进行筛选
           if (values.selectByWord == productInfo[7]) {
             if (productInfo[5] == true) {
               data.push({
@@ -98,7 +101,7 @@ const GoodSelect = () => {
           }
         }
       }
-      setData(data);
+      setData(data); // 更新data状态
     }
   };
 
